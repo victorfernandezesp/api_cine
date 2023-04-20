@@ -1,9 +1,10 @@
 """
-    Muestra un menú con las opciones introducidas por teclado.
+    En este programa se pretende: Muestra un menú con las opciones introducidas por teclado.
 
     Autor: Víctor Fernández España
     Curso: 2022-2023
 """
+
 from typeguard import typechecked
 
 

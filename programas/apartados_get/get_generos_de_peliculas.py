@@ -1,10 +1,10 @@
 """
-    Apartado 5:
-        Mostrar géneros disponibles.
+    En este programa se pretende: Mostrar géneros disponibles.
 
     Autor: Víctor Fernández España
     Curso: 2022-2023
 """
+
 def get_generos_pelicula():
 
     # Importamos Credenciales (Donde se carga la variable de entorno donde está la Api )

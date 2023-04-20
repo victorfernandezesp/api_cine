@@ -1,10 +1,10 @@
 """
-    Apartado 3:
-        Películas a recomendar si nos gusta una película concreta.
+    En este programa se pretende: Encontrar películas a recomendar introduciendo una película de referencia.
 
     Autor: Víctor Fernández España
     Curso: 2022-2023
 """
+
 def get_recomendar_pelicula():
 
     # Importamos Credenciales (Donde se carga la variable de entorno donde está la Api )

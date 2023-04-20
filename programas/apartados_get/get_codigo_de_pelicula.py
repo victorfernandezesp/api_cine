@@ -1,10 +1,10 @@
 """
-    Apartado 1:
-        Buscar código de película según su nombre.
+    En este programa se pretende: Buscar código de película según su nombre.
 
     Autor: Víctor Fernández España
     Curso: 2022-2023
 """
+
 def get_codigo_pelicula():
     # Importamos Credenciales (Donde se carga la variable de entorno donde está la Api )
     import credenciales

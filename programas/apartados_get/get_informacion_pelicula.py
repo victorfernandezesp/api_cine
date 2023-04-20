@@ -1,16 +1,16 @@
 """
-    Apartado 2:
-        Buscar información de película según su código. Entre los datos de la información debe estar:
-            Título.
-            Géneros.
-            Argumento.
-            Duración.
-            ...
-            Y enlace a su web en IMDB.
+    En este programa se pretende: Mostrar información de película según su código.
+    Información a mostrar:
+        *   Título.
+        *   Géneros.
+        *   Argumento.
+        *   Duración.
+        *   Enlace a su web en IMDB.
 
     Autor: Víctor Fernández España
     Curso: 2022-2023
 """
+
 def get_informacion_pelicula():
 
     # Importamos Credenciales (Donde se carga la variable de entorno donde está la Api )
