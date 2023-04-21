@@ -4,30 +4,33 @@
     Autor: Víctor Fernández España
     Curso: 2022-2023
 """
+import sys
 
-def get_recomendar_pelicula():
+
+def muestra_recomendaciones_de_peliculas():
 
     # Importamos Credenciales (Donde se carga la variable de entorno donde está la Api )
     import credenciales
     import requests
+
+    URL_BASE = "https://api.themoviedb.org/3/"
     API_KEY = credenciales.API_KEY
 
-    # Preguntamos al usuario la pelicula
-    pelicula = input("Dime que pelicula te gusta y te recomendare varias más:    ")
-
-    # Mandamos una petición al servidor y la almacenamos en Json
-
-    url = f"https://api.themoviedb.org/3/search/movie?api_key={API_KEY}"
+    pelicula = input("Dime que película te gusta y te recomendaré varias más:    ")
+    # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
+    url = f"{URL_BASE}search/movie?api_key={API_KEY}"
     params = {"query": {pelicula}, "language": "es-ES"}
     respuesta_del_servidor_id_pelicula = requests.get(url, params=params)
     json_respuesta_id_pelicula = respuesta_del_servidor_id_pelicula.json()
+
+    comprueba_que_existe_pelicula(json_respuesta_id_pelicula)
+
     id_pelicula = json_respuesta_id_pelicula["results"][0]["id"]
-
-
-
     contador_paginas = 1
-    url = f"https://api.themoviedb.org/3/movie/{id_pelicula}/recommendations?api_key={API_KEY}"
 
+    # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
+    url = f"{URL_BASE}movie/{id_pelicula}/recommendations?api_key={API_KEY}"
+    # Se saca la información de las películas, se almacena y se muestra
     while True:
         params = {"language": "es-ES", "page": {contador_paginas}}
         respuesta_del_servidor = requests.get(url, params=params)
@@ -41,10 +44,10 @@ def get_recomendar_pelicula():
         print(f"Películas que te recomendadas a partir de {pelicula}:\n")
         for i in range(numero_de_pelis_por_pagina):
             pelicula_recomendada = json_respuesta["results"][i]["title"]
-            print(f"{i+1}.  {pelicula_recomendada}")
             argumento = json_respuesta["results"][i]["overview"]
-            print(f"    Trama argumental: \n {argumento} \n")
-
+            print("_______\n")
+            print(f"Título: {pelicula_recomendada}")
+            print(f"Trama argumental:   {argumento} \n")
         print("\n-------------------------------------------------------------------------------------------------------------")
 
         contador_paginas += 1
@@ -54,5 +57,13 @@ def get_recomendar_pelicula():
         if pregunta_usuario_si_quiere_mas_recomendaciones.upper() == "N":
             break
 
+
+def comprueba_que_existe_pelicula(json_respuesta_id_pelicula):
+    num_resultados = json_respuesta_id_pelicula["total_results"]
+    if num_resultados == 0:
+        print("No existen películas con dicho nombre.")
+        sys.exit(0)
+
+
 if __name__ == '__main__':
-    get_recomendar_pelicula()
+    muestra_recomendaciones_de_peliculas()

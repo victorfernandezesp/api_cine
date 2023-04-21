@@ -4,26 +4,32 @@
     Autor: Víctor Fernández España
     Curso: 2022-2023
 """
+import sys
 
-def get_codigo_pelicula():
+
+def muestra_id_pelicula():
 
     # Importamos Credenciales (Donde se carga la variable de entorno donde está la Api )
     import credenciales
     import requests
 
+    URL_BASE = "https://api.themoviedb.org/3/"
     API_KEY = credenciales.API_KEY
+
     contador_paginas = 1
     contador_peliculas = 0
 
     pelicula = input("¿De qué película quieres saber su código?:    ")
 
-    # Se realiza la petición al servidor para obtener el número de páginas que tiene la consulta realizada
-    url = f"https://api.themoviedb.org/3/search/movie?api_key={API_KEY}"
+    # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
+    url = f"{URL_BASE}search/movie?api_key={API_KEY}"
     params = {"query": {pelicula}, "language": "es-ES", "page": {contador_paginas}}
     respuesta_del_servidor = requests.get(url, params=params)
     json_respuesta = respuesta_del_servidor.json()
 
     num_paginas = json_respuesta["total_pages"]
+
+    comprueba_que_existen_resultados(json_respuesta)
 
     while True:
         # Se realiza la petición al servidor para obtener la información que se quiere obtener
@@ -32,7 +38,7 @@ def get_codigo_pelicula():
         json_respuesta = respuesta_del_servidor.json()
 
         numero_de_pelis_por_pagina = len(json_respuesta["results"])
-
+        # Se saca la información de las películas, se almacena y se muestra
         for j in range(numero_de_pelis_por_pagina):
             titulo = json_respuesta["results"][j]["title"]
             id_pelicula = json_respuesta["results"][j]["id"]
@@ -47,5 +53,13 @@ def get_codigo_pelicula():
             break
         contador_paginas += 1
 
+
+def comprueba_que_existen_resultados(respuesta_json):
+    num_resultados = respuesta_json["total_results"]
+    if num_resultados == 0:
+        print("No existen películas con dicho nombre.")
+        sys.exit(0)
+
+
 if __name__ == '__main__':
-    get_codigo_pelicula()
+    muestra_id_pelicula()

@@ -17,7 +17,7 @@ class Menu:
 
     def __mostrar_opciones(self):
         print("\n*******************************************")
-        print(f"********* BIENVENIDO A {self.__titulo} **********")
+        print(f"******** BIENVENIDO A LA {self.__titulo} ********")
         print("*******************************************\n\n")
         print("Por favor, seleccione una opción: \n")
         contador = 1
@@ -29,8 +29,24 @@ class Menu:
 
     def escoger(self):
         self.__mostrar_opciones()
-        x = int(input("¿Que vas a seleccionar?    "))
-        return x
+        while True:
+            x = int(input("¿Que vas a seleccionar?    "))
+            if 1 <= x <= len(self.__opciones):
+                return x
+            else:
+                print("Ha introducido una opcion incorrecta, vuelva  a intentarlo.")
+
+    def anadir_opciones(self, nueva_opcion, posicion):
+        if posicion == len(self.__opciones):
+            self.__opciones.insert(len(self.__opciones) - 1, nueva_opcion)
+        else:
+            while True:
+                if len(self.__opciones) > posicion > -1:
+                    self.__opciones.insert(posicion+1, nueva_opcion)
+                    break
+                else:
+                    print("Has seleccionado una posicion que no se encuentra disponible. ")
+                    print("Recuerda que la posición debe ser mayor que -1 y menor a la ultima posicion")
 
     def __str__(self):
         return f"{self.__titulo}:{self.__opciones} "
