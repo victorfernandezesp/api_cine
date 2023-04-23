@@ -74,7 +74,8 @@ def muestra_tt():
             id_pelicula = json_respuesta["results"][j]["id"]
             ano_de_lanzamiento = json_respuesta["results"][j]["release_date"]
             valoracion_media = json_respuesta["results"][j]["vote_average"]
-            print("\n ID: {:<10} | Valoración: {:<10} | Año de lanzamiento: {:<10} | Título: {:<60}".format(id_pelicula, valoracion_media,ano_de_lanzamiento[:4], titulo))
+            numero_votos = json_respuesta["results"][j]["vote_count"]
+            print("\n ID: {:<10} | Valoración: {:<10} | Votos: {:<10} | Año de lanzamiento: {:<10} | Título: {:<60}".format(id_pelicula, valoracion_media, numero_votos, ano_de_lanzamiento[:4], titulo))
 
 
     else:
@@ -100,12 +101,14 @@ def muestra_tt():
                 ano_de_lanzamiento = json_respuesta["results"][j]["release_date"]
                 valoracion_media = json_respuesta["results"][j]["vote_average"]
                 longitud_generos_de_pelicula_concreta = len(json_respuesta["results"][j]["genre_ids"])
+                numero_votos = json_respuesta["results"][j]["vote_count"]
                 lista_generos_de_pelicula_concreta = []
                 for k in range(longitud_generos_de_pelicula_concreta):
                     lista_generos_de_pelicula_concreta.append(json_respuesta["results"][j]["genre_ids"][k])
                 if id_genero in lista_generos_de_pelicula_concreta:
-                    print("\n ID: {:<10} | Valoración: {:<10} | Año de lanzamiento: {:<10} | Título: {:<60}".format(
-                        id_pelicula, valoracion_media, ano_de_lanzamiento[:4], titulo))
+                    print("\n ID: {:<10} | Valoración: {:<10} | Votos: {:<10} | Año de lanzamiento: {:<10} | Título: {:<60}".format(
+                            id_pelicula, valoracion_media, numero_votos, ano_de_lanzamiento[:4], titulo))
+
                     contador_peliculas += 1
                     if contador_peliculas == NUMERO_PELIS_A_MOSTRAR:
                         break
