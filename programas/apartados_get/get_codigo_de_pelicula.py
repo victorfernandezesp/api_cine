@@ -9,7 +9,7 @@ import sys
 
 def muestra_id_pelicula():
 
-    # Importamos Credenciales (Donde se carga la variable de entorno donde está la Api )
+    # Importamos Credenciales (Donde se carga la variable de entorno donde está la Api ).
     import credenciales
     import requests
 
@@ -21,7 +21,7 @@ def muestra_id_pelicula():
 
     pelicula = input("¿De qué película quieres saber su código?:    ")
 
-    # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
+    # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable.
     url = f"{URL_BASE}search/movie?api_key={API_KEY}"
     params = {"query": {pelicula}, "language": "es-ES", "page": {contador_paginas}}
     respuesta_del_servidor = requests.get(url, params=params)
@@ -32,13 +32,13 @@ def muestra_id_pelicula():
     comprueba_que_existen_resultados(json_respuesta)
 
     while True:
-        # Se realiza la petición al servidor para obtener la información que se quiere obtener
+        # Se realiza la petición al servidor para obtener la información que se quiere obtener.
         params = {"query": {pelicula}, "language": "es-ES", "page": {contador_paginas}}
         respuesta_del_servidor = requests.get(url, params=params)
         json_respuesta = respuesta_del_servidor.json()
 
         numero_de_pelis_por_pagina = len(json_respuesta["results"])
-        # Se saca la información de las películas, se almacena y se muestra
+        # Se saca la información de las películas, se almacena y se muestra.
         for j in range(numero_de_pelis_por_pagina):
             titulo = json_respuesta["results"][j]["title"]
             id_pelicula = json_respuesta["results"][j]["id"]

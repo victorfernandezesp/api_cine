@@ -29,9 +29,9 @@ def muestra_info_de_pelicula():
     respuesta_del_servidor = requests.get(url, params=params)
     json_respuesta = respuesta_del_servidor.json()
 
-    # Se guarda la información que se desea en variables y se muestran
-    # No podemos comprobar mediante el json el número de películas existentes para saber si hay o no resultados,
-    # así que hacemos un try que desempeña la misma función.
+    """Se guarda la información que se desea en variables y se muestran
+     No podemos comprobar mediante el json el número de películas existentes para saber si hay o no resultados,
+     así que hacemos un try que desempeña la misma función."""
     try:
         titulo = json_respuesta["title"]
     except KeyError:

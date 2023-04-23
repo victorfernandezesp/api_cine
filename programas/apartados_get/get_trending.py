@@ -26,6 +26,11 @@ def muestra_tt():
     genero = input("¿Deseas un género concreto (S/N):    ")
     if genero.upper() == "S":
         while True:
+            """ Si desea un género concreto realizamos una petición al servidor, almacenamos el número de géneros 
+                existentes, almacenamos el íd de géneros y creamos dos listas para identificar cada género con su
+                código además se comprueba que exista ese género, si el usuario no desea un género concreto pasamos y
+                asignamos el género como una N. """
+
             genero_a_buscar =  input("¿Qúe genero deseas?:    ")
             URL_BASE = "https://api.themoviedb.org/3/"
             url = f"{URL_BASE}genre/movie/list?api_key={API_KEY}"
@@ -54,9 +59,8 @@ def muestra_tt():
         print("Debes responder con S/N")
         sys.exit(0)
 
-
-
-
+    """ Si el género es N significa que al usuario le da igual el género, se procede a hacer una petición al servidor 
+        donde se sacan las 5 primeras peliculas TT diarias o semanales. """
     if genero.upper() == "N":
         # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
         url = f"{URL_BASE}/trending/movie/{trending}?api_key={API_KEY}"
@@ -70,7 +74,15 @@ def muestra_tt():
             ano_de_lanzamiento = json_respuesta["results"][j]["release_date"]
             print("\n ID: {:<10} | Año de lanzamiento: {:<10} | Título: {:<60}".format(id_pelicula, ano_de_lanzamiento[:4], titulo))
 
+
     else:
+
+        """ Por el contrario, si se llega hasta aquí significa que el género es uno concreto dictaminado por el usuario 
+        y que además existe, viene recogido en la lista con todos los géneros, hacemos una petición al servidor, en el 
+        primer while servirá para pasar de página en caso de no encontrar mas títulos con dicho género.
+        El for j nos servirá para comprobar cada película de la pagina X y si coincide el mismo género entonces 
+        mostrarlo y aumentar en 1 el contador de películas."""
+
         contador_peliculas = 0
         while True:
             # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
