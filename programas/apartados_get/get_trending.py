@@ -61,6 +61,7 @@ def muestra_tt():
 
     """ Si el género es N significa que al usuario le da igual el género, se procede a hacer una petición al servidor 
         donde se sacan las 5 primeras peliculas TT diarias o semanales. """
+
     if genero.upper() == "N":
         # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
         url = f"{URL_BASE}/trending/movie/{trending}?api_key={API_KEY}"
@@ -72,7 +73,8 @@ def muestra_tt():
             titulo = json_respuesta["results"][j]["title"]
             id_pelicula = json_respuesta["results"][j]["id"]
             ano_de_lanzamiento = json_respuesta["results"][j]["release_date"]
-            print("\n ID: {:<10} | Año de lanzamiento: {:<10} | Título: {:<60}".format(id_pelicula, ano_de_lanzamiento[:4], titulo))
+            valoracion_media = json_respuesta["results"][j]["vote_average"]
+            print("\n ID: {:<10} | Valoración: {:<10} | Año de lanzamiento: {:<10} | Título: {:<60}".format(id_pelicula, valoracion_media,ano_de_lanzamiento[:4], titulo))
 
 
     else:
@@ -96,12 +98,14 @@ def muestra_tt():
                 titulo = json_respuesta["results"][j]["title"]
                 id_pelicula = json_respuesta["results"][j]["id"]
                 ano_de_lanzamiento = json_respuesta["results"][j]["release_date"]
+                valoracion_media = json_respuesta["results"][j]["vote_average"]
                 longitud_generos_de_pelicula_concreta = len(json_respuesta["results"][j]["genre_ids"])
                 lista_generos_de_pelicula_concreta = []
                 for k in range(longitud_generos_de_pelicula_concreta):
                     lista_generos_de_pelicula_concreta.append(json_respuesta["results"][j]["genre_ids"][k])
                 if id_genero in lista_generos_de_pelicula_concreta:
-                    print("\n ID: {:<10} | Año de lanzamiento: {:<10} | Título: {:<60}".format(id_pelicula, ano_de_lanzamiento[:4], titulo))
+                    print("\n ID: {:<10} | Valoración: {:<10} | Año de lanzamiento: {:<10} | Título: {:<60}".format(
+                        id_pelicula, valoracion_media, ano_de_lanzamiento[:4], titulo))
                     contador_peliculas += 1
                     if contador_peliculas == NUMERO_PELIS_A_MOSTRAR:
                         break
