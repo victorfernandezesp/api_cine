@@ -50,6 +50,7 @@ while True:
             muestra_generos_disponibles()
 
         case 6:
+            print("¡Hasta la próxima ^_^!")
             sys.exit(SALIDA_DEL_PROGRAMA_CON_EXITO)
         case _:
             print("Ha introducido una opcion incorrecta, vuelva a intentarlo.")
