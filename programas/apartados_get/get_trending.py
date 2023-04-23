@@ -31,7 +31,7 @@ def muestra_tt():
                 código además se comprueba que exista ese género, si el usuario no desea un género concreto pasamos y
                 asignamos el género como una N. """
 
-            genero_a_buscar =  input("¿Qúe genero deseas?:    ")
+            genero_a_buscar =  input("¿Qúe género deseas?:    ")
             URL_BASE = "https://api.themoviedb.org/3/"
             url = f"{URL_BASE}genre/movie/list?api_key={API_KEY}"
             params = {"language": "es-ES"}
