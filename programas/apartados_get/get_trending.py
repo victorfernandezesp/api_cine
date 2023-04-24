@@ -23,41 +23,46 @@ def muestra_tt():
     id_genero = 0
     trending = pregunta_trending_diario_semanal()
 
-    genero = input("¿Deseas un género concreto (S/N):    ")
-    if genero.upper() == "S":
-        while True:
-            """ Si desea un género concreto realizamos una petición al servidor, almacenamos el número de géneros 
-                existentes, almacenamos el íd de géneros y creamos dos listas para identificar cada género con su
-                código además se comprueba que exista ese género, si el usuario no desea un género concreto pasamos y
-                asignamos el género como una N. """
+    while True:
+        genero = input("¿Deseas un género concreto (S/N):    ")
+        if genero.upper() == "S":
+            while True:
+                """ Si desea un género concreto realizamos una petición al servidor, almacenamos el número de géneros 
+                    existentes, almacenamos el íd de géneros y creamos dos listas para identificar cada género con su
+                    código además se comprueba que exista ese género, si el usuario no desea un género concreto pasamos y
+                    asignamos el género como una N. """
 
-            genero_a_buscar =  input("¿Qúe género deseas?:    ")
-            URL_BASE = "https://api.themoviedb.org/3/"
-            url = f"{URL_BASE}genre/movie/list?api_key={API_KEY}"
-            params = {"language": "es-ES"}
-            respuesta_del_servidor = requests.get(url, params=params)
-            json_respuesta = respuesta_del_servidor.json()
-            num_generos = len(json_respuesta["genres"])
-            listado_generos = []
-            listado_id = []
-            for i in range(num_generos):
-                generos_disponibles = json_respuesta["genres"][i]["name"]
-                listado_generos.append(generos_disponibles)
-                id_generos_disponibles = json_respuesta["genres"][i]["id"]
-                listado_id.append(id_generos_disponibles)
-            if genero_a_buscar in listado_generos:
-                posicion_id = listado_generos.index(genero_a_buscar)
-                genero = genero_a_buscar
-                id_genero = listado_id[posicion_id]
-                break
-            else:
-                print(f"{genero_a_buscar} no es un género disponible/válido")
-                continue
-    elif genero.upper() == "N":
-        pass
-    else:
-        print("Debes responder con S/N")
-        sys.exit(0)
+                genero_a_buscar =  input("¿Qúe género deseas?:    ")
+                url = f"{URL_BASE}genre/movie/list?api_key={API_KEY}"
+                params = {"language": "es-ES"}
+                try:
+                    respuesta_del_servidor = requests.get(url, params=params)
+                except ConnectionError:
+                    print("No tienes conexión a internet, vuelve a intentarlo cuando tengas conexión. ")
+                    sys.exit(1)
+                json_respuesta = respuesta_del_servidor.json()
+                num_generos = len(json_respuesta["genres"])
+                listado_generos = []
+                listado_id = []
+                for i in range(num_generos):
+                    generos_disponibles = json_respuesta["genres"][i]["name"]
+                    listado_generos.append(generos_disponibles)
+                    id_generos_disponibles = json_respuesta["genres"][i]["id"]
+                    listado_id.append(id_generos_disponibles)
+                if genero_a_buscar in listado_generos:
+                    posicion_id = listado_generos.index(genero_a_buscar)
+                    genero = genero_a_buscar
+                    id_genero = listado_id[posicion_id]
+                    break
+                else:
+                    print(f"{genero_a_buscar} no es un género disponible/válido")
+                    continue
+            break
+        elif genero.upper() == "N":
+            break
+        else:
+            print("Debes responder con S/N")
+            continue
 
     """ Si el género es N significa que al usuario le da igual el género, se procede a hacer una petición al servidor 
         donde se sacan las 5 primeras peliculas TT diarias o semanales. """
@@ -66,7 +71,11 @@ def muestra_tt():
         # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
         url = f"{URL_BASE}/trending/movie/{trending}?api_key={API_KEY}"
         params = {"language": "es-ES"}
-        respuesta_del_servidor = requests.get(url, params=params)
+        try:
+            respuesta_del_servidor = requests.get(url, params=params)
+        except ConnectionError:
+            print("No tienes conexión a internet, vuelve a intentarlo cuando tengas conexión. ")
+            sys.exit(1)
         json_respuesta = respuesta_del_servidor.json()
 
         for j in range(NUMERO_PELIS_A_MOSTRAR):
@@ -91,7 +100,11 @@ def muestra_tt():
             # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
             url = f"{URL_BASE}/trending/movie/{trending}?api_key={API_KEY}"
             params = {"language": "es-ES", "page": {contador_paginas}}
-            respuesta_del_servidor = requests.get(url, params=params)
+            try:
+                respuesta_del_servidor = requests.get(url, params=params)
+            except ConnectionError:
+                print("No tienes conexión a internet, vuelve a intentarlo cuando tengas conexión. ")
+                sys.exit(1)
             json_respuesta = respuesta_del_servidor.json()
             num_pelis_en_pagina = len(json_respuesta["results"])
 
@@ -118,17 +131,18 @@ def muestra_tt():
 
 
 def pregunta_trending_diario_semanal():
-    trending = input("¿Deseas conocer el trending diario o semanal?(D/S):    ")
-    if trending.upper() == "D":
-        trending = "day"
+    while True:
+        trending = input("¿Deseas conocer el trending diario o semanal?(D/S):    ")
+        if trending.upper() == "D":
+            trending = "day"
+            return trending
+        elif trending.upper() == "S":
+            trending = "week"
+            return trending
+        else:
+            print("Debe responder con D/S")
+            continue
 
-    elif trending.upper() == "S":
-        trending = "week"
-
-    else:
-        print("Debe responder con D/S")
-        sys.exit(0)
-    return trending
 
 
 if __name__ == '__main__':

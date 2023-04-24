@@ -15,15 +15,22 @@ def muestra_recomendaciones_de_peliculas():
 
     URL_BASE = "https://api.themoviedb.org/3/"
     API_KEY = credenciales.API_KEY
+    while True:
+        pelicula = input("Dime que película te gusta y te recomendaré varias más:    ")
+        # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
+        url = f"{URL_BASE}search/movie?api_key={API_KEY}"
+        params = {"query": {pelicula}, "language": "es-ES"}
+        try:
+            respuesta_del_servidor_id_pelicula = requests.get(url, params=params)
+        except ConnectionError:
+            print("No tienes conexión a internet, vuelve a intentarlo cuando tengas conexión. ")
+            sys.exit(1)
+        json_respuesta_id_pelicula = respuesta_del_servidor_id_pelicula.json()
 
-    pelicula = input("Dime que película te gusta y te recomendaré varias más:    ")
-    # Se realiza la petición al servidor y se guarda el Json que devuelve en una variable
-    url = f"{URL_BASE}search/movie?api_key={API_KEY}"
-    params = {"query": {pelicula}, "language": "es-ES"}
-    respuesta_del_servidor_id_pelicula = requests.get(url, params=params)
-    json_respuesta_id_pelicula = respuesta_del_servidor_id_pelicula.json()
+        pelicula_existe = comprueba_que_existe_pelicula(json_respuesta_id_pelicula)
 
-    comprueba_que_existe_pelicula(json_respuesta_id_pelicula)
+        if pelicula_existe:
+            break
 
     id_pelicula = json_respuesta_id_pelicula["results"][0]["id"]
     contador_paginas = 1
@@ -33,9 +40,12 @@ def muestra_recomendaciones_de_peliculas():
     # Se saca la información de las películas, se almacena y se muestra
     while True:
         params = {"language": "es-ES", "page": {contador_paginas}}
-        respuesta_del_servidor = requests.get(url, params=params)
+        try:
+            respuesta_del_servidor = requests.get(url, params=params)
+        except ConnectionError:
+            print("No tienes conexión a internet, vuelve a intentarlo cuando tengas conexión. ")
+            sys.exit(1)
         json_respuesta = respuesta_del_servidor.json()
-
         num_paginas = json_respuesta["total_pages"]
         numero_de_pelis_por_pagina = len(json_respuesta["results"])
 
@@ -62,8 +72,8 @@ def comprueba_que_existe_pelicula(json_respuesta_id_pelicula):
     num_resultados = json_respuesta_id_pelicula["total_results"]
     if num_resultados == 0:
         print("No existen películas con dicho nombre.")
-        sys.exit(0)
-
+        return False
+    return True
 
 if __name__ == '__main__':
     muestra_recomendaciones_de_peliculas()

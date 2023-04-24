@@ -4,6 +4,8 @@
     Autor: Víctor Fernández España
     Curso: 2022-2023
 """
+import sys
+
 
 def muestra_generos_disponibles():
 
@@ -17,7 +19,11 @@ def muestra_generos_disponibles():
     # Mandamos una petición al servidor y la almacenamos en Json
     url = f"{URL_BASE}genre/movie/list?api_key={API_KEY}"
     params = {"language": "es-ES"}
-    respuesta_del_servidor = requests.get(url, params=params)
+    try:
+        respuesta_del_servidor = requests.get(url, params=params)
+    except ConnectionError:
+        print("No tienes conexión a internet, vuelve a intentarlo cuando tengas conexión. ")
+        sys.exit(1)
     json_respuesta = respuesta_del_servidor.json()
 
     num_generos = len(json_respuesta["genres"])
